@@ -12,12 +12,12 @@ class AppRouter {
       GoRoute(
         path: MapPage.route,
         name: MapPage.name,
-        builder: (_, __) => const MapPage(),
+        builder: (context, state) => const MapPage(),
       ),
       GoRoute(
         path: ProfilePage.route,
         name: ProfilePage.name,
-        builder: (_, __) => const ProfilePage(),
+        builder: (context, state) => const ProfilePage(),
       ),
     ],
   );
