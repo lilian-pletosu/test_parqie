@@ -27,4 +27,8 @@ class MapNotifier extends _$MapNotifier {
   void clearSelection() {
     state = AsyncData(state.requireValue.copyWith(selectedLocation: null));
   }
+
+  void setSearchQuery(String query) {
+    state = AsyncData(state.requireValue.copyWith(searchQuery: query));
+  }
 }
