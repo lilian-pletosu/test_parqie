@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_sizes.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -20,18 +21,18 @@ class ProfilePage extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSizes.p20),
         child: Column(
           children: [
             // Card User Avatar & Info
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(AppSizes.p20),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(AppSizes.r20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
+                    color: AppColors.shadow,
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -51,7 +52,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: AppSizes.p16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +65,7 @@ class ProfilePage extends StatelessWidget {
                             color: AppColors.textPrimary,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: AppSizes.p4),
                         const Text(
                           'alex.popescu@parqie.app',
                           style: TextStyle(
@@ -72,31 +73,31 @@ class ProfilePage extends StatelessWidget {
                             color: AppColors.textSecondary,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: AppSizes.p8),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
+                            horizontal: AppSizes.p10,
+                            vertical: AppSizes.p4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.amber.shade100,
-                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.goldBackground,
+                            borderRadius: BorderRadius.circular(AppSizes.r8),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
                                 Icons.workspace_premium,
-                                size: 14,
-                                color: Colors.amber.shade900,
+                                size: AppSizes.iconSm,
+                                color: AppColors.goldText,
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: AppSizes.p4),
                               Text(
                                 'Membru Gold',
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.amber.shade900,
+                                  color: AppColors.goldText,
                                 ),
                               ),
                             ],
@@ -108,7 +109,7 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSizes.p20),
 
             // Statisitici parcare
             Row(
@@ -121,27 +122,27 @@ class ProfilePage extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSizes.p12),
                 Expanded(
                   child: _buildStatCard(
                     icon: Icons.access_time_rounded,
                     value: '24.5 h',
                     label: 'Timp economisit',
-                    color: Colors.green,
+                    color: AppColors.success,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSizes.p20),
 
             // Vehiculul meu
             _buildSectionHeader('Vehicul salvat'),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSizes.p10),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSizes.p16),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSizes.r16),
               ),
               child: Row(
                 children: [
@@ -150,14 +151,14 @@ class ProfilePage extends StatelessWidget {
                     height: 44,
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppSizes.r12),
                     ),
                     child: const Icon(
                       Icons.directions_car_rounded,
                       color: AppColors.primary,
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: AppSizes.p14),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,6 +168,7 @@ class ProfilePage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         SizedBox(height: 2),
@@ -181,23 +183,22 @@ class ProfilePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.check_circle_rounded,
-                    color: Colors.green.shade600,
+                    color: AppColors.success,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSizes.p24),
 
             // Meniu setări
             _buildSectionHeader('Setări cont'),
-            const SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(16),
-              ),
+            const SizedBox(height: AppSizes.p10),
+            Material(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppSizes.r16),
+              clipBehavior: Clip.antiAlias,
               child: Column(
                 children: [
                   _buildMenuItem(
@@ -205,19 +206,19 @@ class ProfilePage extends StatelessWidget {
                     title: 'Metode de plată',
                     subtitle: 'Visa **** 4242',
                   ),
-                  const Divider(height: 1, indent: 56),
+                  const Divider(height: 1, indent: 56, color: AppColors.divider),
                   _buildMenuItem(
                     icon: Icons.history_rounded,
                     title: 'Istoric parcări',
                     subtitle: 'Vezi ultimele sesiuni',
                   ),
-                  const Divider(height: 1, indent: 56),
+                  const Divider(height: 1, indent: 56, color: AppColors.divider),
                   _buildMenuItem(
                     icon: Icons.notifications_none_rounded,
                     title: 'Notificări',
                     subtitle: 'Alerte expirare timp parcare',
                   ),
-                  const Divider(height: 1, indent: 56),
+                  const Divider(height: 1, indent: 56, color: AppColors.divider),
                   _buildMenuItem(
                     icon: Icons.help_outline_rounded,
                     title: 'Suport & Asistență',
@@ -226,27 +227,30 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSizes.p24),
 
             // Deconectare
             OutlinedButton.icon(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              icon: const Icon(Icons.logout_rounded, color: Colors.red),
+              icon: const Icon(Icons.logout_rounded, color: AppColors.danger),
               label: const Text(
                 'Deconectare',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: AppColors.danger,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
-                side: const BorderSide(color: Colors.red),
+                side: const BorderSide(color: AppColors.danger),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(AppSizes.r14),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSizes.p20),
           ],
         ),
       ),
@@ -274,16 +278,16 @@ class ProfilePage extends StatelessWidget {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSizes.p16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSizes.r16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 12),
+          Icon(icon, color: color, size: AppSizes.iconXl),
+          const SizedBox(height: AppSizes.p12),
           Text(
             value,
             style: const TextStyle(
@@ -314,7 +318,11 @@ class ProfilePage extends StatelessWidget {
       leading: Icon(icon, color: AppColors.primary),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textPrimary,
+        ),
       ),
       subtitle: Text(
         subtitle,
