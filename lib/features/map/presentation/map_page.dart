@@ -61,10 +61,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   void _handleRecenter(LatLng? userLocation) {
     FocusScope.of(context).unfocus();
     if (userLocation != null) {
-      _flutterMapController.move(
-        userLocation,
-        AppSizes.mapDefaultZoom,
-      );
+      _flutterMapController.move(userLocation, AppSizes.mapDefaultZoom);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -94,7 +91,8 @@ class _MapPageState extends ConsumerState<MapPage> {
           AppSizes.mapFocusZoom,
         );
         _expandSheet();
-      } else if (previous?.value?.selectedLocation != null && selected == null) {
+      } else if (previous?.value?.selectedLocation != null &&
+          selected == null) {
         _collapseSheet();
       }
     });
@@ -114,7 +112,8 @@ class _MapPageState extends ConsumerState<MapPage> {
                 )
               : null;
 
-          final initialPos = userLocation ??
+          final initialPos =
+              userLocation ??
               const LatLng(
                 AppSizes.mapDefaultLatitude,
                 AppSizes.mapDefaultLongitude,
@@ -135,7 +134,8 @@ class _MapPageState extends ConsumerState<MapPage> {
                     ref.read(mapProvider.notifier).selectLocation(location);
                   },
                   onMapTap: _dismissAndCollapse,
-                  onMyLocationPressed: () async => _handleRecenter(userLocation),
+                  onMyLocationPressed: () async =>
+                      _handleRecenter(userLocation),
                 ),
 
                 Positioned(
@@ -173,8 +173,9 @@ class _MapPageState extends ConsumerState<MapPage> {
                           AppSizes.sheetMinChildSize,
                           AppSizes.sheetMaxChildSize,
                         ],
-                        snapAnimationDuration:
-                            const Duration(milliseconds: 250),
+                        snapAnimationDuration: const Duration(
+                          milliseconds: 250,
+                        ),
                         builder: (context, controller) {
                           return LocationBottomSheet(
                             scrollController: controller,

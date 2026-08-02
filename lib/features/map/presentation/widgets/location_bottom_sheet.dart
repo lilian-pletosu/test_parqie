@@ -42,151 +42,35 @@ class LocationBottomSheet extends ConsumerWidget {
               ),
             ],
           ),
-          child: ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(
-              AppSizes.p20,
-              AppSizes.p12,
-              AppSizes.p20,
-              AppSizes.p24,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(AppSizes.r28),
             ),
-            children: [
-              // drag handle
-              Center(
-                child: Container(
-                  width: AppSizes.dragHandleWidth,
-                  height: AppSizes.dragHandleHeight,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2),
+            child: CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _HeaderDelegate(
+                    location: location,
+                    onMyLocationPressed: onMyLocationPressed,
                   ),
                 ),
-              ),
-              const SizedBox(height: AppSizes.p12),
-
-              // antet cu butonul de profil si recentrare
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(AppSizes.r12),
-                        onTap: () {
-                          if (location == null) {
-                            onMyLocationPressed?.call();
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSizes.p4,
-                            vertical: AppSizes.p4,
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(AppSizes.p8),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary.withValues(
-                                    alpha: 0.1,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.my_location_rounded,
-                                  color: AppColors.primary,
-                                  size: AppSizes.iconMd,
-                                ),
-                              ),
-                              const SizedBox(width: AppSizes.p10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      location != null
-                                          ? location.title
-                                          : 'Locația ta curentă',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.textPrimary,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      location != null
-                                          ? '${location.availableSpots} locuri libere'
-                                          : 'Apasă pentru recentrare pe hartă',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: location != null
-                                            ? AppColors.textSecondary
-                                            : AppColors.primary,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSizes.p20,
+                    AppSizes.p16,
+                    AppSizes.p20,
+                    AppSizes.p24,
                   ),
-                  const SizedBox(width: AppSizes.p8),
-
-                  // butonul de profil
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(AppSizes.r24),
-                      onTap: () {
-                        context.push(ProfilePage.route);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.primary.withValues(alpha: 0.3),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: const CircleAvatar(
-                          radius: 18,
-                          backgroundColor: AppColors.primary,
-                          child: Text(
-                            'AP',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  sliver: SliverToBoxAdapter(
+                    child: location != null
+                        ? _buildSelectedLocationView(context, ref, location)
+                        : _buildCurrentLocationView(context, ref, mapState.locations),
                   ),
-                ],
-              ),
-              const SizedBox(height: AppSizes.p16),
-              const Divider(height: 1, color: AppColors.divider),
-              const SizedBox(height: AppSizes.p16),
-
-              // content cand o parcare este selectata
-              if (location != null) ...[
-                _buildSelectedLocationView(context, ref, location),
-              ]
-              // content cand nu-i selectata nici o parcare (locatia curenta)
-              else ...[
-                _buildCurrentLocationView(context, ref, mapState.locations),
+                ),
               ],
-            ],
+            ),
           ),
         );
       },
@@ -439,5 +323,180 @@ class LocationBottomSheet extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class _HeaderDelegate extends SliverPersistentHeaderDelegate {
+  _HeaderDelegate({
+    required this.location,
+    required this.onMyLocationPressed,
+  });
+
+  final LocationModel? location;
+  final VoidCallback? onMyLocationPressed;
+
+  @override
+  double get minExtent => 90.0;
+
+  @override
+  double get maxExtent => 90.0;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    final loc = location;
+
+    return Container(
+      color: AppColors.surface,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSizes.p20,
+              AppSizes.p12,
+              AppSizes.p20,
+              AppSizes.p12,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // drag handle
+                Center(
+                  child: Container(
+                    width: AppSizes.dragHandleWidth,
+                    height: AppSizes.dragHandleHeight,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSizes.p12),
+
+                // antet cu butonul de profil si recentrare
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(AppSizes.r12),
+                          onTap: () {
+                            if (loc == null) {
+                              onMyLocationPressed?.call();
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSizes.p4,
+                              vertical: AppSizes.p4,
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(AppSizes.p8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary.withValues(
+                                      alpha: 0.1,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.my_location_rounded,
+                                    color: AppColors.primary,
+                                    size: AppSizes.iconMd,
+                                  ),
+                                ),
+                                const SizedBox(width: AppSizes.p10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        loc != null
+                                            ? loc.title
+                                            : 'Locația ta curentă',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        loc != null
+                                            ? '${loc.availableSpots} locuri libere'
+                                            : 'Apasă pentru recentrare pe hartă',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: loc != null
+                                              ? AppColors.textSecondary
+                                              : AppColors.primary,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSizes.p8),
+
+                    // butonul de profil
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(AppSizes.r24),
+                        onTap: () {
+                          context.push(ProfilePage.route);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.3),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: const CircleAvatar(
+                            radius: 18,
+                            backgroundColor: AppColors.primary,
+                            child: Text(
+                              'AP',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: AppColors.divider),
+        ],
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _HeaderDelegate oldDelegate) {
+    return oldDelegate.location != location;
   }
 }
