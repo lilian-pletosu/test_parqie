@@ -12,9 +12,11 @@ class LocationBottomSheet extends ConsumerWidget {
   const LocationBottomSheet({
     super.key,
     required this.scrollController,
+    this.onMyLocationPressed,
   });
 
   final ScrollController scrollController;
+  final VoidCallback? onMyLocationPressed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,7 +51,7 @@ class LocationBottomSheet extends ConsumerWidget {
               AppSizes.p24,
             ),
             children: [
-              // Mâner tragere (Drag Handle)
+              // drag handle
               Center(
                 child: Container(
                   width: AppSizes.dragHandleWidth,
@@ -62,62 +64,83 @@ class LocationBottomSheet extends ConsumerWidget {
               ),
               const SizedBox(height: AppSizes.p12),
 
-              // Bară Antet cu Buton de Profil
+              // antet cu butonul de profil si recentrare
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(AppSizes.p8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(AppSizes.r12),
+                        onTap: () {
+                          if (location == null) {
+                            onMyLocationPressed?.call();
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSizes.p4,
+                            vertical: AppSizes.p4,
                           ),
-                          child: const Icon(
-                            Icons.my_location_rounded,
-                            color: AppColors.primary,
-                            size: AppSizes.iconMd,
-                          ),
-                        ),
-                        const SizedBox(width: AppSizes.p10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
                             children: [
-                              Text(
-                                location != null
-                                    ? location.title
-                                    : 'Locația ta curentă',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
+                              Container(
+                                padding: const EdgeInsets.all(AppSizes.p8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.1,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.my_location_rounded,
+                                  color: AppColors.primary,
+                                  size: AppSizes.iconMd,
                                 ),
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                location != null
-                                    ? '${location.availableSpots} locuri libere'
-                                    : 'Chișinău, Moldova',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textSecondary,
-                                  fontWeight: FontWeight.w500,
+                              const SizedBox(width: AppSizes.p10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      location != null
+                                          ? location.title
+                                          : 'Locația ta curentă',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      location != null
+                                          ? '${location.availableSpots} locuri libere'
+                                          : 'Apasă pentru recentrare pe hartă',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: location != null
+                                            ? AppColors.textSecondary
+                                            : AppColors.primary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(width: AppSizes.p8),
 
-                  // Buton Profil utilizator
+                  // butonul de profil
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -155,11 +178,11 @@ class LocationBottomSheet extends ConsumerWidget {
               const Divider(height: 1, color: AppColors.divider),
               const SizedBox(height: AppSizes.p16),
 
-              // Conținut când o parcare ESTE selectată
+              // content cand o parcare este selectata
               if (location != null) ...[
                 _buildSelectedLocationView(context, ref, location),
               ]
-              // Conținut când NICIO parcare nu este selectată (Locația curentă)
+              // content cand nu-i selectata nici o parcare (locatia curenta)
               else ...[
                 _buildCurrentLocationView(context, ref, mapState.locations),
               ],
@@ -286,10 +309,7 @@ class LocationBottomSheet extends ConsumerWidget {
               label: '~350 m distanță',
             ),
             const SizedBox(width: AppSizes.p8),
-            _buildDetailChip(
-              icon: Icons.security_rounded,
-              label: 'Pază 24/7',
-            ),
+            _buildDetailChip(icon: Icons.security_rounded, label: 'Pază 24/7'),
           ],
         ),
         const SizedBox(height: AppSizes.p20),
@@ -338,55 +358,57 @@ class LocationBottomSheet extends ConsumerWidget {
         const SizedBox(height: AppSizes.p10),
 
         // Listă scurtă parcări
-        ...locations.take(5).map(
-          (loc) => Padding(
-            padding: const EdgeInsets.only(bottom: AppSizes.p8),
-            child: Material(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(AppSizes.r14),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.p14,
-                  vertical: 2,
-                ),
-                leading: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
+        ...locations
+            .take(5)
+            .map(
+              (loc) => Padding(
+                padding: const EdgeInsets.only(bottom: AppSizes.p8),
+                child: Material(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(AppSizes.r14),
+                  clipBehavior: Clip.antiAlias,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.p14,
+                      vertical: 2,
+                    ),
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.local_parking_rounded,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                    ),
+                    title: Text(
+                      loc.title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '${loc.availableSpots} locuri libere',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.success,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    trailing: const Icon(Icons.chevron_right_rounded, size: 20),
+                    onTap: () {
+                      ref.read(mapProvider.notifier).selectLocation(loc);
+                    },
                   ),
-                  child: const Icon(
-                    Icons.local_parking_rounded,
-                    color: AppColors.primary,
-                    size: 20,
-                  ),
                 ),
-                title: Text(
-                  loc.title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                subtitle: Text(
-                  '${loc.availableSpots} locuri libere',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.success,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                trailing: const Icon(Icons.chevron_right_rounded, size: 20),
-                onTap: () {
-                  ref.read(mapProvider.notifier).selectLocation(loc);
-                },
               ),
             ),
-          ),
-        ),
       ],
     );
   }

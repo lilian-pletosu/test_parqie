@@ -16,6 +16,7 @@ class MapView extends StatelessWidget {
     required this.mapController,
     this.currentPosition,
     this.onLocationTap,
+    this.onMapTap,
     this.onMyLocationPressed,
   });
 
@@ -24,6 +25,7 @@ class MapView extends StatelessWidget {
   final List<LocationModel> locations;
   final MapController mapController;
   final ValueChanged<LocationModel>? onLocationTap;
+  final VoidCallback? onMapTap;
   final Future<void> Function()? onMyLocationPressed;
 
   @override
@@ -35,6 +37,9 @@ class MapView extends StatelessWidget {
           options: MapOptions(
             initialCenter: initialPosition,
             initialZoom: AppSizes.mapDefaultZoom,
+            onTap: (tapPosition, point) {
+              onMapTap?.call();
+            },
             interactionOptions: const InteractionOptions(
               flags: InteractiveFlag.all,
             ),

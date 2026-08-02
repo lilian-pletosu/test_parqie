@@ -15,7 +15,7 @@ class CurrentLocationMarker extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Aura pulsantă exterioară
+          // aura care pulseaza
           Container(
                 width: 44,
                 height: 44,
@@ -33,7 +33,7 @@ class CurrentLocationMarker extends StatelessWidget {
               )
               .fade(begin: 0.7, end: 0.2, duration: 1200.ms),
 
-          // Punctul central albastru cu bordură albă (stil GPS)
+          // punctul central albastru in stil gps
           Container(
             width: 22,
             height: 22,

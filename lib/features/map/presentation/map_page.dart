@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart' as fmap;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../core/constants/app_sizes.dart';
@@ -21,11 +22,64 @@ class MapPage extends ConsumerStatefulWidget {
 
 class _MapPageState extends ConsumerState<MapPage> {
   final fmap.MapController _flutterMapController = fmap.MapController();
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
 
   @override
   void dispose() {
     _flutterMapController.dispose();
+    _sheetController.dispose();
     super.dispose();
+  }
+
+  void _expandSheet() {
+    if (_sheetController.isAttached) {
+      _sheetController.animateTo(
+        AppSizes.sheetMaxChildSize,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
+
+  void _collapseSheet() {
+    if (_sheetController.isAttached) {
+      _sheetController.animateTo(
+        AppSizes.sheetMinChildSize,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInCubic,
+      );
+    }
+  }
+
+  void _dismissAndCollapse() {
+    FocusScope.of(context).unfocus();
+    ref.read(mapProvider.notifier).clearSelection();
+    _collapseSheet();
+  }
+
+  void _handleRecenter(LatLng? userLocation) {
+    FocusScope.of(context).unfocus();
+    if (userLocation != null) {
+      _flutterMapController.move(
+        userLocation,
+        AppSizes.mapDefaultZoom,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Permisiunea de locație este dezactivată. Poți activa accesul din setări.',
+          ),
+          action: SnackBarAction(
+            label: 'Setări',
+            onPressed: () {
+              Geolocator.openAppSettings();
+            },
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -39,6 +93,9 @@ class _MapPageState extends ConsumerState<MapPage> {
           LatLng(selected.latitude, selected.longitude),
           AppSizes.mapFocusZoom,
         );
+        _expandSheet();
+      } else if (previous?.value?.selectedLocation != null && selected == null) {
+        _collapseSheet();
       }
     });
 
@@ -61,7 +118,7 @@ class _MapPageState extends ConsumerState<MapPage> {
               );
 
           return GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: _dismissAndCollapse,
             behavior: HitTestBehavior.translucent,
             child: Stack(
               children: [
@@ -74,15 +131,8 @@ class _MapPageState extends ConsumerState<MapPage> {
                     FocusScope.of(context).unfocus();
                     ref.read(mapProvider.notifier).selectLocation(location);
                   },
-                  onMyLocationPressed: () async {
-                    FocusScope.of(context).unfocus();
-                    if (userLocation != null) {
-                      _flutterMapController.move(
-                        userLocation,
-                        AppSizes.mapDefaultZoom,
-                      );
-                    }
-                  },
+                  onMapTap: _dismissAndCollapse,
+                  onMyLocationPressed: () async => _handleRecenter(userLocation),
                 ),
 
                 Positioned(
@@ -102,11 +152,21 @@ class _MapPageState extends ConsumerState<MapPage> {
                 ),
 
                 DraggableScrollableSheet(
-                  initialChildSize: AppSizes.sheetInitialChildSize,
+                  controller: _sheetController,
+                  initialChildSize: AppSizes.sheetMinChildSize,
                   minChildSize: AppSizes.sheetMinChildSize,
                   maxChildSize: AppSizes.sheetMaxChildSize,
+                  snap: true,
+                  snapSizes: const [
+                    AppSizes.sheetMinChildSize,
+                    AppSizes.sheetMaxChildSize,
+                  ],
+                  snapAnimationDuration: const Duration(milliseconds: 250),
                   builder: (context, controller) {
-                    return LocationBottomSheet(scrollController: controller);
+                    return LocationBottomSheet(
+                      scrollController: controller,
+                      onMyLocationPressed: () => _handleRecenter(userLocation),
+                    );
                   },
                 ),
               ],
