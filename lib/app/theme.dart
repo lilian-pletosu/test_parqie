@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/constants/app_colors.dart';
+import '../core/constants/app_sizes.dart';
 
 class AppTheme {
   AppTheme._();
@@ -18,7 +19,7 @@ class AppTheme {
 
       scaffoldBackgroundColor: AppColors.background,
 
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: false,
         backgroundColor: Colors.transparent,
@@ -29,7 +30,9 @@ class AppTheme {
       cardTheme: CardThemeData(
         elevation: 0,
         color: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSizes.r20),
+        ),
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -37,9 +40,9 @@ class AppTheme {
           elevation: 0,
           minimumSize: const Size(double.infinity, 52),
           backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppSizes.r14),
           ),
         ),
       ),
@@ -48,9 +51,9 @@ class AppTheme {
         style: FilledButton.styleFrom(
           minimumSize: const Size(double.infinity, 52),
           backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppSizes.r14),
           ),
         ),
       ),
@@ -59,15 +62,15 @@ class AppTheme {
         filled: true,
         fillColor: AppColors.surface,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppSizes.r14),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppSizes.r14),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppSizes.r14),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
@@ -80,10 +83,13 @@ class AppTheme {
 
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
 
-      dividerTheme: DividerThemeData(color: Colors.grey.shade200, thickness: 1),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.divider,
+        thickness: 1,
+      ),
     );
   }
 
@@ -96,7 +102,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: const Color(0xFF0F172A),
+      scaffoldBackgroundColor: AppColors.textPrimary,
     );
   }
 }
