@@ -66,7 +66,11 @@ class LocationBottomSheet extends ConsumerWidget {
                   sliver: SliverToBoxAdapter(
                     child: location != null
                         ? _buildSelectedLocationView(context, ref, location)
-                        : _buildCurrentLocationView(context, ref, mapState.locations),
+                        : _buildCurrentLocationView(
+                            context,
+                            ref,
+                            mapState.locations,
+                          ),
                   ),
                 ),
               ],
@@ -327,10 +331,7 @@ class LocationBottomSheet extends ConsumerWidget {
 }
 
 class _HeaderDelegate extends SliverPersistentHeaderDelegate {
-  _HeaderDelegate({
-    required this.location,
-    required this.onMyLocationPressed,
-  });
+  _HeaderDelegate({required this.location, required this.onMyLocationPressed});
 
   final LocationModel? location;
   final VoidCallback? onMyLocationPressed;
@@ -414,7 +415,8 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                                 const SizedBox(width: AppSizes.p10),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         loc != null
@@ -473,7 +475,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                             radius: 18,
                             backgroundColor: AppColors.primary,
                             child: Text(
-                              'AP',
+                              'LP',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,

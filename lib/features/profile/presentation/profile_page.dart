@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
                     radius: 36,
                     backgroundColor: AppColors.primary.withValues(alpha: 0.15),
                     child: const Text(
-                      'AP',
+                      'LP',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -58,7 +58,7 @@ class ProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Alexandru Popescu',
+                          'Lilian Pletosu',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -67,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                         const SizedBox(height: AppSizes.p4),
                         const Text(
-                          'alex.popescu@parqie.app',
+                          'lilian.pletosu@digitalbeauty.ro',
                           style: TextStyle(
                             fontSize: 13,
                             color: AppColors.textSecondary,
@@ -206,19 +206,31 @@ class ProfilePage extends StatelessWidget {
                     title: 'Metode de plată',
                     subtitle: 'Visa **** 4242',
                   ),
-                  const Divider(height: 1, indent: 56, color: AppColors.divider),
+                  const Divider(
+                    height: 1,
+                    indent: 56,
+                    color: AppColors.divider,
+                  ),
                   _buildMenuItem(
                     icon: Icons.history_rounded,
                     title: 'Istoric parcări',
                     subtitle: 'Vezi ultimele sesiuni',
                   ),
-                  const Divider(height: 1, indent: 56, color: AppColors.divider),
+                  const Divider(
+                    height: 1,
+                    indent: 56,
+                    color: AppColors.divider,
+                  ),
                   _buildMenuItem(
                     icon: Icons.notifications_none_rounded,
                     title: 'Notificări',
                     subtitle: 'Alerte expirare timp parcare',
                   ),
-                  const Divider(height: 1, indent: 56, color: AppColors.divider),
+                  const Divider(
+                    height: 1,
+                    indent: 56,
+                    color: AppColors.divider,
+                  ),
                   _buildMenuItem(
                     icon: Icons.help_outline_rounded,
                     title: 'Suport & Asistență',
