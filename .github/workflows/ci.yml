@@ -40,7 +40,7 @@ jobs:
         run: flutter test
 
   build_android:
-    name: Build Android APK
+    name: Build Android Release APK
     needs: analyze_and_test
     runs-on: ubuntu-latest
 
@@ -66,11 +66,11 @@ jobs:
       - name: Run Build Runner
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build Android APK
-        run: flutter build apk --debug
+      - name: Build Android Release APK
+        run: flutter build apk --release
 
-      - name: Upload APK Artifact
+      - name: Upload Release APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk

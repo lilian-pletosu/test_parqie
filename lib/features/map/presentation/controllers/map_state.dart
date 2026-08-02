@@ -14,6 +14,8 @@ class MapState {
   final LocationModel? selectedLocation;
   final String searchQuery;
 
+  static const _undefined = Object();
+
   List<LocationModel> get filteredLocations {
     if (searchQuery.trim().isEmpty) return locations;
     final query = searchQuery.trim().toLowerCase();
@@ -26,13 +28,15 @@ class MapState {
   MapState copyWith({
     List<LocationModel>? locations,
     Position? currentPosition,
-    LocationModel? selectedLocation,
+    Object? selectedLocation = _undefined,
     String? searchQuery,
   }) {
     return MapState(
       locations: locations ?? this.locations,
       currentPosition: currentPosition ?? this.currentPosition,
-      selectedLocation: selectedLocation ?? this.selectedLocation,
+      selectedLocation: identical(selectedLocation, _undefined)
+          ? this.selectedLocation
+          : (selectedLocation as LocationModel?),
       searchQuery: searchQuery ?? this.searchQuery,
     );
   }

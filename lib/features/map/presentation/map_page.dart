@@ -60,6 +60,8 @@ class _MapPageState extends ConsumerState<MapPage> {
 
   void _handleRecenter(LatLng? userLocation) {
     FocusScope.of(context).unfocus();
+    ref.read(mapProvider.notifier).clearSelection();
+    _collapseSheet();
     if (userLocation != null) {
       _flutterMapController.move(userLocation, AppSizes.mapDefaultZoom);
     } else {
@@ -91,9 +93,6 @@ class _MapPageState extends ConsumerState<MapPage> {
           AppSizes.mapFocusZoom,
         );
         _expandSheet();
-      } else if (previous?.value?.selectedLocation != null &&
-          selected == null) {
-        _collapseSheet();
       }
     });
 

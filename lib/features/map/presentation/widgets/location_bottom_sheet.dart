@@ -337,10 +337,10 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
   final VoidCallback? onMyLocationPressed;
 
   @override
-  double get minExtent => 90.0;
+  double get minExtent => 96.0;
 
   @override
-  double get maxExtent => 90.0;
+  double get maxExtent => 96.0;
 
   @override
   Widget build(
@@ -433,7 +433,7 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
                                       const SizedBox(height: 2),
                                       Text(
                                         loc != null
-                                            ? '${loc.availableSpots} locuri libere'
+                                            ? '${loc.availableSpots} locuri libere • Recentrare'
                                             : 'Apasă pentru recentrare pe hartă',
                                         style: TextStyle(
                                           fontSize: 12,

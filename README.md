@@ -70,4 +70,4 @@ flutter test
 
 The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically performs:
 - **`analyze_and_test`**: Runs `flutter analyze` & `flutter test` on every push/PR.
-- **`build_android`**: Compiles the Android debug APK and uploads it as a workflow artifact (`app-debug-apk`).
+- **`build_android`**: Compiles the Android production release APK (`flutter build apk --release`) and uploads it as a workflow artifact (`app-release-apk`).
