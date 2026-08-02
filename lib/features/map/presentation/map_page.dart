@@ -99,7 +99,10 @@ class _MapPageState extends ConsumerState<MapPage> {
       }
     });
 
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text(e.toString())),
@@ -151,23 +154,37 @@ class _MapPageState extends ConsumerState<MapPage> {
                   ),
                 ),
 
-                DraggableScrollableSheet(
-                  controller: _sheetController,
-                  initialChildSize: AppSizes.sheetMinChildSize,
-                  minChildSize: AppSizes.sheetMinChildSize,
-                  maxChildSize: AppSizes.sheetMaxChildSize,
-                  snap: true,
-                  snapSizes: const [
-                    AppSizes.sheetMinChildSize,
-                    AppSizes.sheetMaxChildSize,
-                  ],
-                  snapAnimationDuration: const Duration(milliseconds: 250),
-                  builder: (context, controller) {
-                    return LocationBottomSheet(
-                      scrollController: controller,
-                      onMyLocationPressed: () => _handleRecenter(userLocation),
-                    );
-                  },
+                AnimatedSlide(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  offset: isKeyboardOpen ? const Offset(0, 1) : Offset.zero,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: isKeyboardOpen ? 0.0 : 1.0,
+                    child: IgnorePointer(
+                      ignoring: isKeyboardOpen,
+                      child: DraggableScrollableSheet(
+                        controller: _sheetController,
+                        initialChildSize: AppSizes.sheetMinChildSize,
+                        minChildSize: AppSizes.sheetMinChildSize,
+                        maxChildSize: AppSizes.sheetMaxChildSize,
+                        snap: true,
+                        snapSizes: const [
+                          AppSizes.sheetMinChildSize,
+                          AppSizes.sheetMaxChildSize,
+                        ],
+                        snapAnimationDuration:
+                            const Duration(milliseconds: 250),
+                        builder: (context, controller) {
+                          return LocationBottomSheet(
+                            scrollController: controller,
+                            onMyLocationPressed: () =>
+                                _handleRecenter(userLocation),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
