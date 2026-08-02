@@ -1,0 +1,78 @@
+import '../models/location_model.dart';
+
+abstract final class MockLocations {
+  static const all = [
+    LocationModel(
+      id: '1',
+      title: 'Parcare MallDova',
+      description: 'Parcare subterană și supraterană.',
+      latitude: 46.995730,
+      longitude: 28.820670,
+      availableSpots: 10,
+      totalSpots: 100,
+    ),
+    LocationModel(
+      id: '2',
+      title: 'Parcare Shopping MallDova',
+      description: 'Locuri disponibile în apropierea intrării principale.',
+      latitude: 46.996250,
+      longitude: 28.821250,
+      availableSpots: 276,
+      totalSpots: 500,
+    ),
+    LocationModel(
+      id: '3',
+      title: 'Parcare Piața Marii Adunări Naționale',
+      description: 'Parcare publică în centrul orașului.',
+      latitude: 47.024512,
+      longitude: 28.822137,
+      availableSpots: 70,
+      totalSpots: 200,
+    ),
+    LocationModel(
+      id: '4',
+      title: 'Parcare Valea Morilor',
+      description: 'Parcare pentru vizitatori.',
+      latitude: 47.016970,
+      longitude: 28.807840,
+      availableSpots: 33,
+      totalSpots: 100,
+    ),
+    LocationModel(
+      id: '5',
+      title: 'Parcare Aeroport Chișinău',
+      description: 'Parcare cu acces rapid la terminal.',
+      latitude: 46.928340,
+      longitude: 28.930970,
+      availableSpots: 100,
+      totalSpots: 1000,
+    ),
+    LocationModel(
+      id: '6',
+      title: 'Parcare Port Mall',
+      description: 'Parcare pentru clienții centrului comercial.',
+      latitude: 47.045820,
+      longitude: 28.860470,
+      availableSpots: 8,
+      totalSpots: 15,
+    ),
+    LocationModel(
+      id: '7',
+      title: 'Parcare Kaufland Botanica',
+      description: 'Parcare gratuită pentru clienți.',
+      latitude: 46.985360,
+      longitude: 28.857170,
+      availableSpots: 27,
+      totalSpots: 50,
+    ),
+    LocationModel(
+      id: '8',
+      title: 'Parcare Gara Feroviară',
+      description: 'Parcare cu acces către gară.',
+      latitude: 47.011750,
+      longitude: 28.850140,
+      availableSpots: 3,
+      totalSpots: 20,
+    ),
+  ];
+}

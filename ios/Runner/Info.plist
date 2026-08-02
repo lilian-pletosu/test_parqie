@@ -70,5 +70,9 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Aplicația are nevoie de acces la locație pentru a afișa harta.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>Aplicația are nevoie de acces la locație pentru a afișa harta.</string>
 	</dict>
 </plist>
