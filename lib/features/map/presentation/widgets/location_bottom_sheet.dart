@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
 import '../../../profile/presentation/profile_page.dart';
 import '../../data/models/location_model.dart';
 import '../controllers/map_controller.dart';
@@ -21,17 +22,19 @@ class LocationBottomSheet extends ConsumerWidget {
 
     return state.when(
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (err, stack) => const SizedBox.shrink(),
       data: (mapState) {
         final location = mapState.selectedLocation;
 
         return Container(
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(AppSizes.r28),
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: AppColors.shadow,
                 blurRadius: 16,
                 offset: const Offset(0, -4),
               ),
@@ -39,20 +42,25 @@ class LocationBottomSheet extends ConsumerWidget {
           ),
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+            padding: const EdgeInsets.fromLTRB(
+              AppSizes.p20,
+              AppSizes.p12,
+              AppSizes.p20,
+              AppSizes.p24,
+            ),
             children: [
               // Mâner tragere (Drag Handle)
               Center(
                 child: Container(
-                  width: 38,
-                  height: 4,
+                  width: AppSizes.dragHandleWidth,
+                  height: AppSizes.dragHandleHeight,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: AppColors.border,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSizes.p12),
 
               // Bară Antet cu Buton de Profil
               Row(
@@ -62,7 +70,7 @@ class LocationBottomSheet extends ConsumerWidget {
                     child: Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(AppSizes.p8),
                           decoration: BoxDecoration(
                             color: AppColors.primary.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
@@ -70,10 +78,10 @@ class LocationBottomSheet extends ConsumerWidget {
                           child: const Icon(
                             Icons.my_location_rounded,
                             color: AppColors.primary,
-                            size: 18,
+                            size: AppSizes.iconMd,
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: AppSizes.p10),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,13 +115,13 @@ class LocationBottomSheet extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppSizes.p8),
 
-                  // Buton Profil utilizator (Cerința 3 din cerințe)
+                  // Buton Profil utilizator
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(AppSizes.r24),
                       onTap: () {
                         context.push(ProfilePage.route);
                       },
@@ -134,7 +142,7 @@ class LocationBottomSheet extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                           ),
                         ),
@@ -143,9 +151,9 @@ class LocationBottomSheet extends ConsumerWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              const Divider(height: 1),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSizes.p16),
+              const Divider(height: 1, color: AppColors.divider),
+              const SizedBox(height: AppSizes.p16),
 
               // Conținut când o parcare ESTE selectată
               if (location != null) ...[
@@ -169,8 +177,8 @@ class LocationBottomSheet extends ConsumerWidget {
   ) {
     final ratio = location.availableSpots / location.totalSpots;
     final statusColor = ratio >= 0.5
-        ? Colors.green
-        : (ratio >= 0.2 ? Colors.orange : Colors.red);
+        ? AppColors.success
+        : (ratio >= 0.2 ? AppColors.warning : AppColors.danger);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,10 +187,13 @@ class LocationBottomSheet extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.p10,
+                vertical: 5,
+              ),
               decoration: BoxDecoration(
                 color: statusColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppSizes.r10),
               ),
               child: Row(
                 children: [
@@ -194,7 +205,7 @@ class LocationBottomSheet extends ConsumerWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: AppSizes.p6),
                   Text(
                     ratio >= 0.5
                         ? 'Disponibilitate mare'
@@ -217,19 +228,19 @@ class LocationBottomSheet extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSizes.p12),
 
         // Indicator grad de ocupare
         ClipRRect(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(AppSizes.p6),
           child: LinearProgressIndicator(
             value: ratio,
             minHeight: 8,
-            backgroundColor: Colors.grey.shade200,
+            backgroundColor: AppColors.border,
             valueColor: AlwaysStoppedAnimation<Color>(statusColor),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSizes.p8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -250,7 +261,7 @@ class LocationBottomSheet extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSizes.p16),
 
         Text(
           location.description,
@@ -260,7 +271,7 @@ class LocationBottomSheet extends ConsumerWidget {
             height: 1.4,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSizes.p16),
 
         // Chips detalii
         Row(
@@ -269,19 +280,19 @@ class LocationBottomSheet extends ConsumerWidget {
               icon: Icons.payments_outlined,
               label: '10 MDL / oră',
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSizes.p8),
             _buildDetailChip(
               icon: Icons.directions_walk_rounded,
               label: '~350 m distanță',
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSizes.p8),
             _buildDetailChip(
               icon: Icons.security_rounded,
               label: 'Pază 24/7',
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSizes.p20),
 
         // Butoane de acțiune
         Row(
@@ -295,7 +306,10 @@ class LocationBottomSheet extends ConsumerWidget {
                     ),
                   );
                 },
-                icon: const Icon(Icons.navigation_rounded, size: 18),
+                icon: const Icon(
+                  Icons.navigation_rounded,
+                  size: AppSizes.iconMd,
+                ),
                 label: const Text('Navighează'),
               ),
             ),
@@ -321,53 +335,55 @@ class LocationBottomSheet extends ConsumerWidget {
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: AppSizes.p10),
 
         // Listă scurtă parcări
         ...locations.take(5).map(
-          (loc) => Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            decoration: BoxDecoration(
+          (loc) => Padding(
+            padding: const EdgeInsets.only(bottom: AppSizes.p8),
+            child: Material(
               color: AppColors.background,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 2,
-              ),
-              leading: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
+              borderRadius: BorderRadius.circular(AppSizes.r14),
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.p14,
+                  vertical: 2,
                 ),
-                child: const Icon(
-                  Icons.local_parking_rounded,
-                  color: AppColors.primary,
-                  size: 20,
+                leading: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.local_parking_rounded,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
                 ),
-              ),
-              title: Text(
-                loc.title,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                title: Text(
+                  loc.title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                '${loc.availableSpots} locuri libere',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.green,
-                  fontWeight: FontWeight.w600,
+                subtitle: Text(
+                  '${loc.availableSpots} locuri libere',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.success,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                trailing: const Icon(Icons.chevron_right_rounded, size: 20),
+                onTap: () {
+                  ref.read(mapProvider.notifier).selectLocation(loc);
+                },
               ),
-              trailing: const Icon(Icons.chevron_right_rounded, size: 20),
-              onTap: () {
-                ref.read(mapProvider.notifier).selectLocation(loc);
-              },
             ),
           ),
         ),
@@ -377,16 +393,19 @@ class LocationBottomSheet extends ConsumerWidget {
 
   Widget _buildDetailChip({required IconData icon, required String label}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.p10,
+        vertical: AppSizes.p6,
+      ),
       decoration: BoxDecoration(
         color: AppColors.background,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppSizes.r10),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: AppColors.primary),
-          const SizedBox(width: 6),
+          Icon(icon, size: AppSizes.iconSm, color: AppColors.primary),
+          const SizedBox(width: AppSizes.p6),
           Text(
             label,
             style: const TextStyle(

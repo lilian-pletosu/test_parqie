@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_parqie/core/constants/app_colors.dart';
+
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class ParkingMarker extends StatelessWidget {
   const ParkingMarker({
@@ -18,10 +20,10 @@ class ParkingMarker extends StatelessWidget {
   Color get statusColor {
     final ratio = availableSpots / totalSpots;
 
-    if (ratio >= .6) return Colors.green;
-    if (ratio >= .3) return Colors.orange;
+    if (ratio >= 0.6) return AppColors.success;
+    if (ratio >= 0.3) return AppColors.warning;
 
-    return Colors.red;
+    return AppColors.danger;
   }
 
   @override
@@ -36,12 +38,12 @@ class ParkingMarker extends StatelessWidget {
             child: Material(
               color: AppColors.surface,
               elevation: 6,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(AppSizes.r18),
               shadowColor: AppColors.textSecondary,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 8,
+                  horizontal: AppSizes.p10,
+                  vertical: AppSizes.p8,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -55,11 +57,11 @@ class ParkingMarker extends StatelessWidget {
                       ),
                       child: const Icon(
                         Icons.local_parking_rounded,
-                        color: Colors.white,
-                        size: 18,
+                        color: AppColors.white,
+                        size: AppSizes.iconMd,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppSizes.p8),
                     Flexible(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -72,6 +74,7 @@ class ParkingMarker extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           Text(
@@ -96,7 +99,7 @@ class ParkingMarker extends StatelessWidget {
               width: 12,
               height: 12,
               margin: const EdgeInsets.only(top: 2),
-              decoration: const BoxDecoration(color: Colors.white),
+              decoration: const BoxDecoration(color: AppColors.white),
             ),
           ),
         ],

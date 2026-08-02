@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:test_parqie/features/map/presentation/widgets/parking_marker.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
 import '../../data/models/location_model.dart';
 import 'current_location_marker.dart';
+import 'parking_marker.dart';
 
 class MapView extends StatelessWidget {
   const MapView({
@@ -33,7 +34,7 @@ class MapView extends StatelessWidget {
           mapController: mapController,
           options: MapOptions(
             initialCenter: initialPosition,
-            initialZoom: 15,
+            initialZoom: AppSizes.mapDefaultZoom,
             interactionOptions: const InteractionOptions(
               flags: InteractiveFlag.all,
             ),
@@ -48,8 +49,8 @@ class MapView extends StatelessWidget {
                 ...locations.map(
                   (location) => Marker(
                     point: LatLng(location.latitude, location.longitude),
-                    width: 170,
-                    height: 80,
+                    width: AppSizes.parkingMarkerWidth,
+                    height: AppSizes.parkingMarkerHeight,
                     alignment: Alignment.topCenter,
                     child: ParkingMarker(
                       title: location.title,
@@ -62,8 +63,8 @@ class MapView extends StatelessWidget {
                 if (currentPosition != null)
                   Marker(
                     point: currentPosition!,
-                    width: 48,
-                    height: 48,
+                    width: AppSizes.currentLocationMarkerSize,
+                    height: AppSizes.currentLocationMarkerSize,
                     alignment: Alignment.center,
                     child: const CurrentLocationMarker(),
                   ),
@@ -72,11 +73,11 @@ class MapView extends StatelessWidget {
           ],
         ),
         Positioned(
-          right: 24,
+          right: AppSizes.p24,
           bottom: 48,
           child: FloatingActionButton(
             heroTag: 'my_location',
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.surface,
             foregroundColor: AppColors.primary,
             onPressed: onMyLocationPressed,
             child: const Icon(Icons.my_location_rounded),

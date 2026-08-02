@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
 
 class CurrentLocationMarker extends StatelessWidget {
   const CurrentLocationMarker({super.key});
@@ -9,8 +10,8 @@ class CurrentLocationMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 48,
-      height: 48,
+      width: AppSizes.currentLocationMarkerSize,
+      height: AppSizes.currentLocationMarkerSize,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -39,10 +40,10 @@ class CurrentLocationMarker extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.primary,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 3.5),
+              border: Border.all(color: AppColors.white, width: 3.5),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.25),
+                  color: AppColors.shadow,
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),

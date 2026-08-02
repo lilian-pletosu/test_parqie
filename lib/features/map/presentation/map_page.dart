@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart' as fmap;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:test_parqie/features/map/presentation/controllers/map_controller.dart';
-import 'package:test_parqie/features/map/presentation/widgets/location_bottom_sheet.dart';
-import 'package:test_parqie/features/map/presentation/widgets/map_view.dart';
+
+import '../../../core/constants/app_sizes.dart';
+import 'controllers/map_controller.dart';
+import 'widgets/location_bottom_sheet.dart';
+import 'widgets/location_search_bar.dart';
+import 'widgets/map_view.dart';
 
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});
@@ -34,7 +37,7 @@ class _MapPageState extends ConsumerState<MapPage> {
       if (selected != null) {
         _flutterMapController.move(
           LatLng(selected.latitude, selected.longitude),
-          15.5,
+          AppSizes.mapFocusZoom,
         );
       }
     });
@@ -51,32 +54,63 @@ class _MapPageState extends ConsumerState<MapPage> {
                 )
               : null;
 
-          final initialPos = userLocation ?? const LatLng(47.0105, 28.8638);
+          final initialPos = userLocation ??
+              const LatLng(
+                AppSizes.mapDefaultLatitude,
+                AppSizes.mapDefaultLongitude,
+              );
 
-          return Stack(
-            children: [
-              MapView(
-                initialPosition: initialPos,
-                currentPosition: userLocation,
-                locations: mapState.locations,
-                mapController: _flutterMapController,
-                onLocationTap: ref.read(mapProvider.notifier).selectLocation,
-                onMyLocationPressed: () async {
-                  if (userLocation != null) {
-                    _flutterMapController.move(userLocation, 15.0);
-                  }
-                },
-              ),
+          return GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            behavior: HitTestBehavior.translucent,
+            child: Stack(
+              children: [
+                MapView(
+                  initialPosition: initialPos,
+                  currentPosition: userLocation,
+                  locations: mapState.filteredLocations,
+                  mapController: _flutterMapController,
+                  onLocationTap: (location) {
+                    FocusScope.of(context).unfocus();
+                    ref.read(mapProvider.notifier).selectLocation(location);
+                  },
+                  onMyLocationPressed: () async {
+                    FocusScope.of(context).unfocus();
+                    if (userLocation != null) {
+                      _flutterMapController.move(
+                        userLocation,
+                        AppSizes.mapDefaultZoom,
+                      );
+                    }
+                  },
+                ),
 
-              DraggableScrollableSheet(
-                initialChildSize: 0.22,
-                minChildSize: 0.18,
-                maxChildSize: 0.5,
-                builder: (context, controller) {
-                  return LocationBottomSheet(scrollController: controller);
-                },
-              ),
-            ],
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + AppSizes.p12,
+                  left: AppSizes.p16,
+                  right: AppSizes.p16,
+                  child: LocationSearchBar(
+                    onLocationSelected: (location) {
+                      FocusScope.of(context).unfocus();
+                      ref.read(mapProvider.notifier).selectLocation(location);
+                      _flutterMapController.move(
+                        LatLng(location.latitude, location.longitude),
+                        AppSizes.mapFocusZoom,
+                      );
+                    },
+                  ),
+                ),
+
+                DraggableScrollableSheet(
+                  initialChildSize: AppSizes.sheetInitialChildSize,
+                  minChildSize: AppSizes.sheetMinChildSize,
+                  maxChildSize: AppSizes.sheetMaxChildSize,
+                  builder: (context, controller) {
+                    return LocationBottomSheet(scrollController: controller);
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),
